@@ -6,6 +6,7 @@ import androidx.databinding.DataBindingUtil;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkInfo;
@@ -21,6 +22,9 @@ import android.widget.Toast;
 import android.widget.ViewAnimator;
 
 import com.anureet.stormy.databinding.ActivityMainBinding;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -40,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
     private CurrentWeather currentWeather;
     private ImageView iconImageView;
+    private FusedLocationProviderClient fusedLocationClient;
 
     final double latitude = 37.8267;
     final double longitude = -122.4233;
@@ -48,6 +53,21 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations this can be null.
+                        Log.d(TAG,"Reet's location is : "+location);
+                        if (location != null) {
+                            // Logic to handle location object
+                        }
+                    }
+                });
+
         getForecast(latitude,longitude);
 
 
