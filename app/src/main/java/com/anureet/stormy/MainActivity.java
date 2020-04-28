@@ -6,6 +6,8 @@ import androidx.databinding.DataBindingUtil;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.Network;
@@ -31,6 +33,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -44,10 +48,13 @@ public class MainActivity extends AppCompatActivity {
 
     private CurrentWeather currentWeather;
     private ImageView iconImageView;
+    private String add;
     private FusedLocationProviderClient fusedLocationClient;
 
-    final double latitude = 37.8267;
-    final double longitude = -122.4233;
+    private TextView locationTextView;
+
+    double latitude=0 ; //= 28.538386;
+    double longitude=0 ;//= 77.197975;
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
@@ -64,12 +71,37 @@ public class MainActivity extends AppCompatActivity {
                         Log.d(TAG,"Reet's location is : "+location);
                         if (location != null) {
                             // Logic to handle location object
+                            latitude = location.getLatitude();
+                            longitude = location.getLongitude();
+
                         }
                     }
                 });
+//        Log.d(TAG,"latitude: "+latitude);
+//        Log.d(TAG,"longitude: "+longitude);
 
         getForecast(latitude,longitude);
 
+
+    }
+
+    public void getAddress(double lat, double lng) {
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
+            Address obj = addresses.get(0);
+            add = obj.getSubLocality()+", "+obj.getLocality();
+
+            locationTextView = findViewById(R.id.locationValue);
+            locationTextView.setText(add);
+
+            Log.d(TAG, "Address: " + add);
+
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
 
     }
 
@@ -141,7 +173,12 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             });
+            if(latitude!=0 && longitude!=0){
+                getAddress(latitude,longitude);
+            }
         }
+
+
     }
 
     private CurrentWeather getCurrentDetails(String jsonData) throws JSONException {
