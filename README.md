@@ -1,7 +1,7 @@
 # Stormy
 Stormy is a weather application which requests weather forecast data from an API provided by [darksky.net](https://darksky.net/dev).
 
-This is an android application which is build using java.
+This is an android application which is built using Java.
 
 ## Weather Updates Screen
 <img src="WeatherUpdatesScreen.jpeg" height="20%" width="40% ">
@@ -20,7 +20,7 @@ You need to have android studio installed on your device and create an Android V
 
 ## Installation
 * Clone the repository in a directory of your choice
-* Open the Minesweeper folder with Android Studio
+* Open the Stromy folder with Android Studio
 * Build the gradle file
 * Now you can test the application on either android virtual device or your android device
 
